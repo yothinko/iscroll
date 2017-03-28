@@ -19,6 +19,7 @@
 		}
 
 		var wheelDeltaX, wheelDeltaY,
+			scrollingHorizontally,
 			newX, newY,
 			that = this;
 
@@ -56,6 +57,7 @@
 
 		wheelDeltaX *= this.options.invertWheelDirection;
 		wheelDeltaY *= this.options.invertWheelDirection;
+		scrollingHorizontally = Math.abs(e.deltaY) < Math.abs(e.deltaX);
 
 		if ( this.options.snap ) {
 			newX = this.currentPage.pageX;
@@ -78,8 +80,8 @@
 			return;
 		}
 
-		newX = this.x + Math.round(this.hasHorizontalScroll ? wheelDeltaX : 0);
-		newY = this.y + Math.round(this.hasVerticalScroll ? wheelDeltaY : 0);
+		newX = this.x + Math.round(this.hasHorizontalScroll && scrollingHorizontally ? wheelDeltaX : 0);
+		newY = this.y + Math.round(this.hasVerticalScroll && ! scrollingHorizontally ? wheelDeltaY : 0);
 
 		this.directionX = wheelDeltaX > 0 ? -1 : wheelDeltaX < 0 ? 1 : 0;
 		this.directionY = wheelDeltaY > 0 ? -1 : wheelDeltaY < 0 ? 1 : 0;
@@ -98,11 +100,11 @@
 
 		this.scrollTo(newX, newY, 0);
 
-		if (! this.hasVerticalScroll && (Math.abs(e.deltaY) < Math.abs(e.deltaX))) {
+		if (! this.hasVerticalScroll && scrollingHorizontally) {
 			e.preventDefault();
 		}
 
-		if (! this.hasHorizontalScroll && (Math.abs(e.deltaX) < Math.abs(e.deltaY))) {
+		if (! this.hasHorizontalScroll && ! scrollingHorizontally) {
 			e.preventDefault();
 		}
 
