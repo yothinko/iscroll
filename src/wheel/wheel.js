@@ -98,5 +98,13 @@
 
 		this.scrollTo(newX, newY, 0);
 
+		if (! this.hasVerticalScroll && (Math.abs(e.deltaY) < Math.abs(e.deltaX))) {
+			e.preventDefault();
+		}
+
+		if (! this.hasHorizontalScroll && (Math.abs(e.deltaX) < Math.abs(e.deltaY))) {
+			e.preventDefault();
+		}
+
 // INSERT POINT: _wheel
 	},
