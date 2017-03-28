@@ -18,8 +18,6 @@
 			return;
 		}
 
-		e.preventDefault();
-
 		var wheelDeltaX, wheelDeltaY,
 			newX, newY,
 			that = this;
