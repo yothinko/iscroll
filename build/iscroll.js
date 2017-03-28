@@ -1157,8 +1157,6 @@ IScroll.prototype = {
 			return;
 		}
 
-		e.preventDefault();
-
 		var wheelDeltaX, wheelDeltaY,
 			newX, newY,
 			that = this;
@@ -1197,11 +1195,6 @@ IScroll.prototype = {
 
 		wheelDeltaX *= this.options.invertWheelDirection;
 		wheelDeltaY *= this.options.invertWheelDirection;
-
-		if ( !this.hasVerticalScroll ) {
-			wheelDeltaX = wheelDeltaY;
-			wheelDeltaY = 0;
-		}
 
 		if ( this.options.snap ) {
 			newX = this.currentPage.pageX;
