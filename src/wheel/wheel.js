@@ -14,7 +14,7 @@
 	},
 
 	_wheel: function (e) {
-		if ( !this.enabled ) {
+		if ( !this.enabled || ( !this.hasVerticalScroll && !this.hasHorizontalScroll )) {
 			return;
 		}
 
@@ -100,11 +100,11 @@
 
 		this.scrollTo(newX, newY, 0);
 
-		if (! this.hasVerticalScroll && scrollingHorizontally) {
+		if ( !this.hasVerticalScroll && scrollingHorizontally ) {
 			e.preventDefault();
 		}
 
-		if (! this.hasHorizontalScroll && ! scrollingHorizontally) {
+		if ( !this.hasHorizontalScroll && !scrollingHorizontally ) {
 			e.preventDefault();
 		}
 
