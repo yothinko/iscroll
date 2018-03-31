@@ -1159,7 +1159,7 @@ IScroll.prototype = {
 
 		var wheelDeltaX, wheelDeltaY,
 			scrollingHorizontally,
-			newX, newY, doBounce = false,
+			newX, newY,
 			that = this;
 
 		if ( this.wheelTimeout === undefined ) {
@@ -1225,34 +1225,19 @@ IScroll.prototype = {
 		this.directionX = wheelDeltaX > 0 ? -1 : wheelDeltaX < 0 ? 1 : 0;
 		this.directionY = wheelDeltaY > 0 ? -1 : wheelDeltaY < 0 ? 1 : 0;
 
-		if (this.lastDirectionX !== this.directionX || this.lastDirectionY !== this.directionY) {
-			// Cancel animation
-			this.isAnimating = false;
-		}
-		this.scrollTo(newX, newY, 0);
-
-		this.lastDirectionX = this.directionX;
-		this.lastDirectionY = this.directionY;
-
 		if ( newX > 0 ) {
 			newX = 0;
-			doBounce = true;
 		} else if ( newX < this.maxScrollX ) {
 			newX = this.maxScrollX;
-			doBounce = true;
 		}
 
 		if ( newY > 0 ) {
 			newY = 0;
-			doBounce = true;
 		} else if ( newY < this.maxScrollY ) {
 			newY = this.maxScrollY;
-			doBounce = true;
 		}
 
-		if (doBounce && this.options.bounce) {
-		    this.scrollTo(newX, newY, this.options.bounceTime, this.options.bounceEasing);
-		}
+		this.scrollTo(newX, newY, 0);
 
 		if ( !this.hasVerticalScroll && scrollingHorizontally ) {
 			e.preventDefault();

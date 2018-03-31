@@ -1,4 +1,4 @@
-/*! iScroll v5.2.0-snapshot ~ (c) 2008-2017 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.3.3 ~ (c) 2008-2018 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -414,7 +414,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.2.0-snapshot',
+	version: '5.3.3',
 
 	_init: function () {
 		this._initEvents();
@@ -1162,13 +1162,12 @@ IScroll.prototype = {
 	},
 
 	_wheel: function (e) {
-		if ( !this.enabled ) {
+		if ( !this.enabled || ( !this.hasVerticalScroll && !this.hasHorizontalScroll )) {
 			return;
 		}
 
-		e.preventDefault();
-
 		var wheelDeltaX, wheelDeltaY,
+			scrollingHorizontally,
 			newX, newY,
 			that = this;
 
@@ -1206,11 +1205,7 @@ IScroll.prototype = {
 
 		wheelDeltaX *= this.options.invertWheelDirection;
 		wheelDeltaY *= this.options.invertWheelDirection;
-
-		if ( !this.hasVerticalScroll ) {
-			wheelDeltaX = wheelDeltaY;
-			wheelDeltaY = 0;
-		}
+		scrollingHorizontally = Math.abs(e.deltaY) < Math.abs(e.deltaX);
 
 		if ( this.options.snap ) {
 			newX = this.currentPage.pageX;
@@ -1233,8 +1228,8 @@ IScroll.prototype = {
 			return;
 		}
 
-		newX = this.x + Math.round(this.hasHorizontalScroll ? wheelDeltaX : 0);
-		newY = this.y + Math.round(this.hasVerticalScroll ? wheelDeltaY : 0);
+		newX = this.x + Math.round(this.hasHorizontalScroll && scrollingHorizontally ? wheelDeltaX : 0);
+		newY = this.y + Math.round(this.hasVerticalScroll && ! scrollingHorizontally ? wheelDeltaY : 0);
 
 		this.directionX = wheelDeltaX > 0 ? -1 : wheelDeltaX < 0 ? 1 : 0;
 		this.directionY = wheelDeltaY > 0 ? -1 : wheelDeltaY < 0 ? 1 : 0;
@@ -1252,6 +1247,14 @@ IScroll.prototype = {
 		}
 
 		this.scrollTo(newX, newY, 0);
+
+		if ( !this.hasVerticalScroll && scrollingHorizontally ) {
+			e.preventDefault();
+		}
+
+		if ( !this.hasHorizontalScroll && !scrollingHorizontally ) {
+			e.preventDefault();
+		}
 
 		if ( this.options.probeType > 1 ) {
 			this._execEvent('scroll');
